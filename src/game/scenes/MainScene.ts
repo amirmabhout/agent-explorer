@@ -5,8 +5,6 @@ export default class MainScene extends Phaser.Scene {
   private shops: Map<string, Phaser.GameObjects.Container> = new Map();
   private player!: Phaser.GameObjects.Container;
   private playerTooltip!: Phaser.GameObjects.Container;
-  private backgroundImage!: Phaser.GameObjects.Image;
-  private targetCameraX: number = 0;
 
   private readonly SHOP_WIDTH = 240;
   private readonly SHOP_HEIGHT = 280;
@@ -67,7 +65,7 @@ export default class MainScene extends Phaser.Scene {
 
   preload(): void {
     // Load the cyberpunk cityscape background
-    this.load.image('cyberpunk-bg', '/background.jpg');
+    this.load.image('cyberpunk-bg', '/background.png');
   }
 
   create(): void {
@@ -76,10 +74,10 @@ export default class MainScene extends Phaser.Scene {
     // Create background image
     this.createBackground(worldWidth);
 
-    // Create shops
+    // Create shops - positioned higher on the ground line + 2/3 player height offset
     this.SHOP_CONFIGS.forEach((config, index) => {
       const xPos = 200 + index * (this.SHOP_WIDTH + this.SHOP_SPACING) + this.SHOP_WIDTH / 2;
-      const yPos = this.GROUND_Y - this.SHOP_HEIGHT / 2;
+      const yPos = this.GROUND_Y - this.SHOP_HEIGHT / 2 - 53; // Raised by 2/3 of player height (~53px)
       this.createShop({ ...config, x: xPos, y: yPos });
     });
 
@@ -121,7 +119,7 @@ export default class MainScene extends Phaser.Scene {
 
   private createPlayer(): void {
     const startX = 600;
-    const startY = this.GROUND_Y - 40;
+    const startY = this.GROUND_Y + 40; // Moved down by player's own height (~80px from -40 to +40)
 
     this.player = this.add.container(startX, startY);
 
@@ -265,7 +263,7 @@ export default class MainScene extends Phaser.Scene {
 
     frame.on('pointerdown', () => {
       console.log(`Shop clicked: ${config.id} (${config.label})`);
-      this.flashShop(container, config.color);
+      this.flashShop(container);
     });
 
     frame.on('pointerover', () => {
@@ -301,7 +299,7 @@ export default class MainScene extends Phaser.Scene {
 
     // Glass vials on counter (scaled down)
     const vialPositions = [-60, -30, 0, 30, 60];
-    vialPositions.forEach((x, i) => {
+    vialPositions.forEach((x) => {
       const vial = this.add.rectangle(x, 55, 14, 25, 0x4a2a6a, 0.7);
       vial.setStrokeStyle(1.5, 0x00ffff, 0.8);
       container.add(vial);
@@ -713,7 +711,7 @@ export default class MainScene extends Phaser.Scene {
     return logo;
   }
 
-  private flashShop(container: Phaser.GameObjects.Container, color: number): void {
+  private flashShop(container: Phaser.GameObjects.Container): void {
     this.tweens.add({
       targets: container,
       alpha: 0.7,

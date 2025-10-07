@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import { gameConfig } from '../game/config';
 import MainScene from '../game/scenes/MainScene';
@@ -10,7 +10,6 @@ interface GameContainerProps {
 export default function GameContainer({ onGameReady }: GameContainerProps) {
   const gameRef = useRef<Phaser.Game | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || gameRef.current) return;
@@ -23,7 +22,6 @@ export default function GameContainer({ onGameReady }: GameContainerProps) {
       const scene = gameRef.current?.scene.getScene('MainScene') as MainScene;
       if (scene) {
         onGameReady(scene);
-        setIsReady(true);
       }
     });
 
