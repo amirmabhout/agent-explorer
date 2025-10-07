@@ -102,9 +102,6 @@ export default class MainScene extends Phaser.Scene {
     // Create background
     this.createBackground(worldWidth);
 
-    // Create tile-based ground
-    this.createTileGround(worldWidth);
-
     // Create shops - tile-based architecture
     this.SHOP_CONFIGS.forEach((config, index) => {
       const xPos = 300 + index * (this.SHOP_WIDTH + this.SHOP_SPACING) + this.SHOP_WIDTH / 2;
@@ -412,11 +409,6 @@ export default class MainScene extends Phaser.Scene {
     // Add decorations based on shop type
     switch (config.type) {
       case 'yield':
-        // Signboard 1 (yield/percentage theme)
-        const yieldSign = this.add.image(0, -config.height / 2 - 40, 'signboard-1');
-        yieldSign.setScale(0.8);
-        container.add(yieldSign);
-
         // Lamps on sides
         const yieldLampL = this.add.image(-config.width / 2 - 15, -config.height / 2 + 60, 'lamp-1');
         yieldLampL.setScale(0.7);
@@ -426,53 +418,16 @@ export default class MainScene extends Phaser.Scene {
         yieldLampR.setScale(0.7);
         yieldLampR.setFlipX(true);
         container.add(yieldLampR);
-
-        // Animated money
-        const money1 = this.add.image(config.width / 2 - 30, -80, 'money');
-        money1.setScale(0.6);
-        container.add(money1);
-        this.tweens.add({
-          targets: money1,
-          y: -90,
-          duration: 2000,
-          yoyo: true,
-          repeat: -1,
-          ease: 'Sine.easeInOut'
-        });
         break;
 
       case 'otc':
-        // Signboard 3 (trading theme)
-        const otcSign = this.add.image(0, -config.height / 2 - 40, 'signboard-3');
-        otcSign.setScale(0.8);
-        container.add(otcSign);
-
         // Vending machine (ticket machine)
         const otcVending = this.add.image(config.width / 2 + 35, 40, 'vending-2');
         otcVending.setScale(0.9);
         container.add(otcVending);
-
-        // Animated card
-        const card1 = this.add.image(-config.width / 2 + 30, -60, 'card');
-        card1.setScale(0.5);
-        container.add(card1);
-        this.tweens.add({
-          targets: card1,
-          angle: 10,
-          y: -65,
-          duration: 1500,
-          yoyo: true,
-          repeat: -1,
-          ease: 'Sine.easeInOut'
-        });
         break;
 
       case 'bridge':
-        // Large signboard (portal theme)
-        const bridgeSign = this.add.image(0, -config.height / 2 - 45, 'signboard-5');
-        bridgeSign.setScale(1);
-        container.add(bridgeSign);
-
         // Double lamps
         const bridgeLampL = this.add.image(-config.width / 2 - 18, -config.height / 2 + 40, 'lamp-2');
         bridgeLampL.setScale(0.75);
@@ -485,37 +440,13 @@ export default class MainScene extends Phaser.Scene {
         break;
 
       case 'swap':
-        // Signboard 7 (market theme)
-        const swapSign = this.add.image(0, -config.height / 2 - 40, 'signboard-7');
-        swapSign.setScale(0.8);
-        container.add(swapSign);
-
         // Vending machine (item dispenser)
         const swapVending = this.add.image(-config.width / 2 - 35, 50, 'vending-4');
         swapVending.setScale(0.85);
         container.add(swapVending);
-
-        // Animated money
-        const money2 = this.add.image(config.width / 2 - 40, -70, 'money');
-        money2.setScale(0.5);
-        container.add(money2);
-        this.tweens.add({
-          targets: money2,
-          y: -75,
-          angle: -5,
-          duration: 1800,
-          yoyo: true,
-          repeat: -1,
-          ease: 'Sine.easeInOut'
-        });
         break;
 
       case 'lending':
-        // Signboard 9 (vault/bank theme)
-        const lendingSign = this.add.image(0, -config.height / 2 - 40, 'signboard-9');
-        lendingSign.setScale(0.8);
-        container.add(lendingSign);
-
         // Security lamp
         const lendingLamp = this.add.image(config.width / 2 + 15, -config.height / 2 + 50, 'lamp-3');
         lendingLamp.setScale(0.7);
@@ -525,20 +456,6 @@ export default class MainScene extends Phaser.Scene {
         const lendingVending = this.add.image(config.width / 2 + 38, 45, 'vending-6');
         lendingVending.setScale(0.9);
         container.add(lendingVending);
-
-        // Animated card
-        const card2 = this.add.image(-config.width / 2 + 35, -70, 'card');
-        card2.setScale(0.5);
-        container.add(card2);
-        this.tweens.add({
-          targets: card2,
-          y: -75,
-          angle: 5,
-          duration: 1600,
-          yoyo: true,
-          repeat: -1,
-          ease: 'Sine.easeInOut'
-        });
         break;
     }
   }
