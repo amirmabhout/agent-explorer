@@ -223,10 +223,10 @@ export default class MainScene extends Phaser.Scene {
 
     const label = this.add.text(0, -config.height / 2 + 25, config.label, {
       fontFamily: 'Orbitron',
-      fontSize: '16px',
+      fontSize: '13px',
       color: '#ffffff',
       stroke: `#${config.color.toString(16).padStart(6, '0')}`,
-      strokeThickness: 2,
+      strokeThickness: 1.5,
     });
     label.setOrigin(0.5);
     container.add(label);
@@ -294,39 +294,35 @@ export default class MainScene extends Phaser.Scene {
   }
 
   private createYieldOptimizerInterior(container: Phaser.GameObjects.Container, config: Shop): void {
-    // Counter
-    const counter = this.add.rectangle(0, 80, 280, 80, 0x2a1a4a);
+    // Counter (scaled down)
+    const counter = this.add.rectangle(0, 70, 200, 60, 0x2a1a4a);
     counter.setStrokeStyle(2, config.color, 0.6);
     container.add(counter);
 
-    // Glass vials on counter
-    const vialPositions = [-80, -40, 0, 40, 80];
+    // Glass vials on counter (scaled down)
+    const vialPositions = [-60, -30, 0, 30, 60];
     vialPositions.forEach((x, i) => {
-      // Vial body
-      const vial = this.add.rectangle(x, 60, 20, 35, 0x4a2a6a, 0.7);
-      vial.setStrokeStyle(2, 0x00ffff, 0.8);
+      const vial = this.add.rectangle(x, 55, 14, 25, 0x4a2a6a, 0.7);
+      vial.setStrokeStyle(1.5, 0x00ffff, 0.8);
       container.add(vial);
 
-      // Liquid inside (different levels)
-      const liquid = this.add.rectangle(x, 70, 16, Phaser.Math.Between(10, 25), config.color, 0.6);
+      const liquid = this.add.rectangle(x, 62, 11, Phaser.Math.Between(8, 18), config.color, 0.6);
       container.add(liquid);
 
-      // Glow effect
-      const glow = this.add.circle(x, 70, 12, config.color, 0.2);
+      const glow = this.add.circle(x, 62, 9, config.color, 0.2);
       container.add(glow);
     });
 
-    // Coin displays
+    // Coin displays (scaled down)
     for (let i = 0; i < 3; i++) {
-      const coinX = -90 + i * 90;
-      const coin = this.add.circle(coinX, -30, 25, 0xffd700, 0.8);
-      coin.setStrokeStyle(3, 0xffaa00, 1);
+      const coinX = -65 + i * 65;
+      const coin = this.add.circle(coinX, -25, 18, 0xffd700, 0.8);
+      coin.setStrokeStyle(2, 0xffaa00, 1);
       container.add(coin);
 
-      // $ symbol
-      const symbol = this.add.text(coinX, -30, '$', {
+      const symbol = this.add.text(coinX, -25, '$', {
         fontFamily: 'Orbitron',
-        fontSize: '24px',
+        fontSize: '18px',
         color: '#000000',
         fontStyle: 'bold'
       });
@@ -334,14 +330,14 @@ export default class MainScene extends Phaser.Scene {
       container.add(symbol);
     }
 
-    // Ethereum logo
-    const ethLogo = this.createEthereumLogo(120, -50, 30);
+    // Ethereum logo (scaled down)
+    const ethLogo = this.createEthereumLogo(85, -40, 22);
     container.add(ethLogo);
 
-    // Percentage displays
-    const percentText = this.add.text(-120, -80, '+125%\nAPY', {
+    // Percentage displays (scaled down)
+    const percentText = this.add.text(-85, -65, '+125%\nAPY', {
       fontFamily: 'Orbitron',
-      fontSize: '14px',
+      fontSize: '11px',
       color: '#00ff00',
       align: 'center'
     });
@@ -647,25 +643,25 @@ export default class MainScene extends Phaser.Scene {
   }
 
   private createSpeechBubble(container: Phaser.GameObjects.Container, text: string, color: number): void {
-    const bubbleX = 80;
-    const bubbleY = -130;
+    const bubbleX = 60;
+    const bubbleY = -110;
 
-    // Bubble background
-    const bubble = this.add.rectangle(bubbleX, bubbleY, 100, 50, 0x0a0a0a, 0.9);
-    bubble.setStrokeStyle(2, color, 0.8);
+    // Bubble background (scaled down)
+    const bubble = this.add.rectangle(bubbleX, bubbleY, 85, 42, 0x0a0a0a, 0.9);
+    bubble.setStrokeStyle(1.5, color, 0.8);
     container.add(bubble);
 
-    // Pointer
-    const pointer = this.add.triangle(bubbleX - 30, bubbleY + 25, -6, -12, 6, -12, 0, 0, color, 0.8);
+    // Pointer (scaled down)
+    const pointer = this.add.triangle(bubbleX - 25, bubbleY + 21, -5, -10, 5, -10, 0, 0, color, 0.8);
     container.add(pointer);
 
-    // Text
+    // Text (scaled down)
     const bubbleText = this.add.text(bubbleX, bubbleY, text, {
       fontFamily: 'Orbitron',
-      fontSize: '11px',
+      fontSize: '9px',
       color: '#ffffff',
       align: 'center',
-      lineSpacing: 2
+      lineSpacing: 1.5
     });
     bubbleText.setOrigin(0.5);
     container.add(bubbleText);
@@ -728,19 +724,21 @@ export default class MainScene extends Phaser.Scene {
   }
 
   public scrollLeft(): void {
-    const currentIndex = Math.round(this.cameras.main.scrollX / this.SHOP_WIDTH);
+    const shopDistance = this.SHOP_WIDTH + this.SHOP_SPACING;
+    const currentIndex = Math.round((this.cameras.main.scrollX - 200) / shopDistance);
     const newIndex = Math.max(0, currentIndex - 1);
-    const targetX = newIndex * this.SHOP_WIDTH;
+    const targetX = 200 + newIndex * shopDistance;
 
-    this.cameras.main.pan(targetX + 600, 300, 600, 'Power2');
+    this.cameras.main.pan(targetX + 480, 300, 600, 'Power2');
   }
 
   public scrollRight(): void {
-    const currentIndex = Math.round(this.cameras.main.scrollX / this.SHOP_WIDTH);
+    const shopDistance = this.SHOP_WIDTH + this.SHOP_SPACING;
+    const currentIndex = Math.round((this.cameras.main.scrollX - 200) / shopDistance);
     const maxIndex = this.SHOP_CONFIGS.length - 1;
     const newIndex = Math.min(maxIndex, currentIndex + 1);
-    const targetX = newIndex * this.SHOP_WIDTH;
+    const targetX = 200 + newIndex * shopDistance;
 
-    this.cameras.main.pan(targetX + 600, 300, 600, 'Power2');
+    this.cameras.main.pan(targetX + 480, 300, 600, 'Power2');
   }
 }

@@ -75,17 +75,22 @@ Each shop features unique interiors with custom props, merchants, and speech bub
 
 ## 🚀 Setup Instructions
 
-1. **Install dependencies**:
+1. **Add background image**:
+   - Save the cyberpunk cityscape image as `public/background.jpg`
+   - See `public/BACKGROUND_INSTRUCTIONS.md` for detailed instructions
+   - The image should show the purple/pink neon cityscape with reflections
+
+2. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. **Run development server**:
+3. **Run development server**:
    ```bash
    npm run dev
    ```
 
-3. **Open in browser**:
+4. **Open in browser**:
    - Navigate to `http://localhost:5173`
    - Use left/right arrow buttons to scroll between shops
    - Click on any shop to interact (check console)
