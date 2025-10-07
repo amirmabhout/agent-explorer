@@ -128,24 +128,6 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  private createTileGround(worldWidth: number): void {
-    // Create brick ground using tiles 1-20 (ground/pavement tiles)
-    const tileSize = 16; // Assume 16x16 tiles
-    const groundTiles = [1, 2, 3, 4, 5, 6, 7, 8]; // Variety of ground tiles
-
-    const startY = this.GROUND_Y;
-    const numRows = 3; // Build 3 rows of ground tiles
-
-    for (let row = 0; row < numRows; row++) {
-      for (let x = 0; x < worldWidth; x += tileSize) {
-        const tileIndex = groundTiles[Math.floor(Math.random() * groundTiles.length)];
-        const tile = this.add.image(x, startY + row * tileSize, `tile-${tileIndex}`);
-        tile.setOrigin(0, 0);
-        tile.setDepth(-2);
-      }
-    }
-  }
-
   private buildShopWall(
     container: Phaser.GameObjects.Container,
     tileIndices: number[],
