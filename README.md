@@ -1,68 +1,35 @@
 # Agent Explorer - Cyberpunk Hub
 
-A fully immersive 2D side-scrolling cyberpunk agent hub built with Vite, React, TypeScript, and Phaser 3. Explore 5 unique crypto-themed shops with detailed interiors, NPCs, and interactive elements.
+A clean, professional 2D side-scrolling cyberpunk agent hub built with Vite, React, TypeScript, and Phaser 3. Explore 5 unique crypto-themed shops with pixel art assets.
 
 ## ✨ Features
 
 ### 🎮 Player Character
-- **Animated player character** with cyberpunk outfit and neon cyan visor
+- **Animated player character** with smooth camera tracking
 - **Idle breathing animation** for lifelike presence
-- **Camera tracking** - character smoothly follows as you scroll through shops
-- **Interactive tooltip** - "Click merchant to connect" hover indicator
+- **Supports sprite loading** - Use your own pixel art or fallback to simple graphics
+- **Interactive tooltip** - "Click shop to explore"
 
-### 🏪 5 Detailed Crypto-Themed Shops
-Each shop features unique interiors with custom props, merchants, and speech bubbles:
+### 🏪 5 Clean Crypto-Themed Shops
+Each shop features:
+- **Simple, uncluttered design** - Clean neon banner with shop name
+- **One merchant character** standing at the entrance
+- **Neon color coding** - Purple, Orange, Cyan, Pink, Blue
+- **Interactive** - Hover for glow effects, click to interact
+- **Proper spacing** - 150px between shops for better visibility
 
-#### 1. **YIELD OPTIMIZER** (Purple Glow)
-- Glass vials with glowing liquids
-- Golden coin displays with $ symbols
-- Ethereum logo
-- +125% APY percentage indicators
-- Animated merchant NPC
+**Shop List:**
+1. **YIELD OPTIMIZER** (Purple) - Optimize yield farming strategies
+2. **OTC DESK** (Orange) - Over-the-counter trading
+3. **BRIDGE OPERATOR** (Cyan) - Cross-chain bridging
+4. **SWAP/DEX** (Pink) - Decentralized exchange
+5. **LENDING VAULT** (Blue) - Lending and borrowing protocols
 
-#### 2. **OTC DESK** (Orange Glow)
-- Live trading candlestick charts (red/green)
-- Balance scales with golden pans
-- Bitcoin logo
-- BTC price ticker ($45.2K)
-- Trading merchant with waving animation
-
-#### 3. **BRIDGE OPERATOR** (Cyan Glow)
-- Massive animated portal gateway with pulsing rings
-- SOL branding in portal center
-- Gateway pillars
-- Continuous portal pulse animation
-- No merchant (portal-only shop)
-
-#### 4. **SWAP/DEX** (Pink Glow)
-- Multi-level shelves with colorful potion bottles
-- DAI and wUGC token logos
-- 18+ glowing bottles in various colors
-- Merchant bartender NPC
-- Speech bubble: "Swap your assets?"
-
-#### 5. **LENDING VAULT** (Blue Glow)
-- Server racks with blinking status lights
-- Data screens showing lending protocols
-- LTC (Litecoin) logo
-- APR: 8.5% | TVL: $45M display
-- Robot NPC with pulsing antenna
-
-### 🌆 Cyberpunk World Design
-- **Cityscape background** with 15+ procedurally generated buildings
-- **Neon-lit windows** with varying glow intensities
-- **Ground-level perspective** with atmospheric depth
-- **Speech bubbles** above each shop with merchant dialogue
-- **Purple-to-black sky gradient** for moody atmosphere
-- **Neon cyan ground line** separating shops from floor
-
-### 💫 Interactive Elements
-- **Smooth camera scrolling** with easing between shops
-- **Hover effects** - shops scale to 103% and border glow intensifies
-- **Click interactions** - flash effects and detailed console logging
-- **Arrow-shaped navigation buttons** with cyan neon glow
-- **Scroll hint indicator** with pulsing dots in bottom-right
-- **Animated NPCs** - merchants wave, robots pulse, portals swirl
+### 🎨 Professional Asset System
+- **Sprite-based rendering** - Supports professional pixel art assets
+- **Fallback graphics** - Works without assets using simple placeholders
+- **Easy asset integration** - Drop sprites in folders and they load automatically
+- **Recommended free asset packs** from itch.io included
 
 ## 🛠 Tech Stack
 
@@ -75,22 +42,36 @@ Each shop features unique interiors with custom props, merchants, and speech bub
 
 ## 🚀 Setup Instructions
 
-1. **Add background image**:
-   - Save the cyberpunk cityscape image as `public/background.jpg`
-   - See `public/BACKGROUND_INSTRUCTIONS.md` for detailed instructions
-   - The image should show the purple/pink neon cityscape with reflections
+### 1. **Add Background Image** (Required)
+   - Save your cyberpunk cityscape image as `public/background.png`
+   - Recommended size: 1920x1080 (will be scaled to fit)
+   - The ground line should be roughly in the middle
 
-2. **Install dependencies**:
+### 2. **Add Asset Packs** (Optional but Recommended)
+   - See `public/assets/ASSET_SETUP.md` for detailed instructions
+   - Download free pixel art from the recommended itch.io packs
+   - Extract and place in appropriate folders:
+     - `public/assets/backgrounds/` - Background layers
+     - `public/assets/characters/` - Player and merchant sprites
+     - `public/assets/shops/` - Shop building tiles
+
+**Top Recommended Packs** (All FREE):
+- [FREE Sidescroller Shooter - Central City](https://anokolisa.itch.io/sidescroller-shooter-central-city) - Backgrounds
+- [Cyberpunk Character Pack](https://oco.itch.io/cyberpunk-character-pack) - Characters
+- [Retro Cybercity STREETS Tileset](https://everlyspixelsandpens.itch.io/retro-cybercity-streets-tileset) - Buildings
+- [Synth Cities Environment](https://ansimuz.itch.io/synth-cities-environment) - Alternative backgrounds
+
+### 3. **Install Dependencies**
    ```bash
    npm install
    ```
 
-3. **Run development server**:
+### 4. **Run Development Server**
    ```bash
    npm run dev
    ```
 
-4. **Open in browser**:
+### 5. **Open in Browser**
    - Navigate to `http://localhost:5173`
    - Use left/right arrow buttons to scroll between shops
    - Click on any shop to interact (check console)
@@ -106,12 +87,20 @@ src/
 │   └── UIOverlay.tsx        # Arrow buttons & scroll hint
 ├── game/                    # Phaser game code
 │   ├── scenes/
-│   │   └── MainScene.ts     # Main scene (shops, player, background)
+│   │   └── MainScene.ts     # Main scene (simplified & clean)
 │   ├── config.ts           # Phaser configuration
 │   └── types.ts            # TypeScript interfaces
 ├── App.tsx                 # Main React component
 ├── main.tsx                # Application entry point
 └── index.css               # Tailwind imports & global styles
+
+public/
+├── background.png          # Main background image (USER PROVIDED)
+└── assets/                 # Optional pixel art assets
+    ├── backgrounds/        # Parallax background layers
+    ├── characters/         # Player and NPC sprites
+    ├── shops/              # Shop building sprites
+    └── ui/                 # UI elements
 ```
 
 ## 🎮 Controls
@@ -121,14 +110,19 @@ src/
 - **Click Shop**: Interact with merchant (logs shop ID and name)
 - **Hover Shop**: See scale animation and enhanced glow effects
 
-## 🎨 Visual Design Philosophy
+## 🎨 Design Philosophy
 
-- **Pure Phaser Graphics** - All visual elements created using Phaser's built-in shapes/graphics API
-- **No External Assets** - Everything rendered procedurally (no image files needed)
-- **Neon Aesthetic** - Heavy use of glowing borders, transparent overlays, vibrant colors
-- **Layered Depth** - Background cityscape → shops → foreground character → UI overlay
-- **Smooth Animations** - Phaser tweens for breathing, pulsing, waving, portal effects
-- **Crypto Theme** - Each shop represents real DeFi concepts (yield, OTC, bridging, swapping, lending)
+### Current Version: Clean & Minimal
+- **No clutter** - Removed all interior decorations (vials, charts, coins, etc.)
+- **One character per shop** - Simple merchant at entrance
+- **Clear branding** - Neon banner with shop name only
+- **Professional assets** - Supports sprite-based rendering
+- **Fallback graphics** - Works immediately without assets
+
+### Asset Integration
+- **Automatic detection** - If sprite exists, use it; otherwise use fallback
+- **No breaking changes** - App works with or without asset packs
+- **Easy upgrade path** - Drop assets in folders and refresh
 
 ## 🏗 Building for Production
 
@@ -144,29 +138,62 @@ The optimized build will be in the `dist/` directory.
 npm run preview
 ```
 
+## 📦 Asset Guidelines
+
+### Character Sprites
+- **Format**: PNG with transparency
+- **Size**: 32x32 to 64x64 pixels (will be scaled)
+- **Animations**: Idle, walk (optional)
+- **Naming**: `player_idle.png`, `merchant_idle.png`
+
+### Background
+- **Format**: PNG or JPG
+- **Size**: 1920x1080 or larger
+- **Style**: Cyberpunk cityscape with ground line in middle
+
+### Shop Buildings
+- **Format**: PNG tileset
+- **Size**: Modular tiles (16x16 or 32x32)
+- **Style**: Cyberpunk storefronts
+
 ## 🔮 Future Enhancement Ideas
 
-- **Shop Interior Scenes** - Click to enter and explore detailed shop environments
-- **Agent NFT System** - Create, customize, and trade AI agent NFTs
-- **Inventory System** - Collect items, manage portfolios, track assets
-- **Mini-Games** - Yield farming simulator, bridge timing game, swap matching
-- **Sound Design** - Cyberpunk ambient music, neon hum, click sounds
-- **Wallet Integration** - Connect real Web3 wallets for transactions
-- **Multiplayer** - See other players exploring shops in real-time
-- **Quest System** - Complete missions for each shop merchant
-- **Mobile Support** - Touch controls for scrolling and interactions
+- **Animated sprites** - Walking, idle, interaction animations
+- **Parallax backgrounds** - Multi-layer scrolling depth
+- **Shop interiors** - Click to enter detailed shop scenes
+- **Sound effects** - Ambient music and interaction sounds
+- **More interactions** - Mini-games, trading, inventory
+- **Mobile support** - Touch controls for scrolling
 
 ## 📜 Technical Highlights
 
-- **Phaser + React Integration** - Game canvas managed by Phaser, UI overlay by React
-- **Type-Safe** - Full TypeScript coverage with interfaces for shops, events
-- **Performant** - Single game instance, efficient container-based shop rendering
-- **Modular** - Each shop interior is a separate method for easy expansion
-- **Animated** - Idle animations, portal effects, blinking lights, breathing character
-- **Responsive** - Camera pans smoothly, fits to container dimensions
+- **Clean architecture** - Removed 600+ lines of cluttered code
+- **Smart fallbacks** - Works without assets, improves with them
+- **Type-safe** - Full TypeScript coverage
+- **Performant** - Simplified rendering, better FPS
+- **Modular** - Easy to extend and customize
+- **Asset-ready** - Drop-in sprite support
+
+## 🆓 Free Assets
+
+All recommended asset packs are **completely free** for personal and commercial use. Check individual licenses on itch.io for specific terms.
 
 ---
 
 **Built with ❤️ using Vite + React + TypeScript + Phaser 3**
 
-🎮 Ready to explore the cyberpunk agent hub? Run `npm run dev` and start scrolling! 🚀
+🎮 Ready to explore? Follow the setup instructions and add your assets! 🚀
+
+## 📝 Version History
+
+### v2.0 - Clean Redesign
+- Removed all procedural clutter
+- Simplified shops to banner + merchant
+- Added professional asset support
+- Improved spacing (150px between shops)
+- Better fallback graphics
+
+### v1.0 - Initial Release
+- Procedural graphics
+- Complex shop interiors
+- 5 themed shops with details
