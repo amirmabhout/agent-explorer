@@ -15,6 +15,7 @@ export default class MainScene extends Phaser.Scene {
   private swipeStartX: number = 0;
   private swipeThreshold: number = 50;
   private currentStreetIndex: number = 0;
+  private backgroundMusic!: Phaser.Sound.BaseSound;
 
   private readonly STREETS: Street[] = [
     { id: 'generative-markets', name: 'Generative Markets Street' },
@@ -81,6 +82,9 @@ export default class MainScene extends Phaser.Scene {
 
     // Load character sprites
     this.load.image('player-idle', '/assets/characters/player_idle.png');
+
+    // Load background music
+    this.load.audio('bgMusic', '/assets/music/Industria.mp3');
   }
 
   create(): void {
@@ -119,6 +123,13 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+
+    // Setup background music
+    this.backgroundMusic = this.sound.add('bgMusic', {
+      loop: true,
+      volume: 0.3, // 30% volume for ambient background
+    });
+    this.backgroundMusic.play();
   }
 
   update(): void {
@@ -239,5 +250,19 @@ export default class MainScene extends Phaser.Scene {
 
   public getAllStreets(): Street[] {
     return this.STREETS;
+  }
+
+  public toggleMusic(): boolean {
+    if (this.backgroundMusic.isPlaying) {
+      this.backgroundMusic.pause();
+      return false; // Music is now paused
+    } else {
+      this.backgroundMusic.resume();
+      return true; // Music is now playing
+    }
+  }
+
+  public isMusicPlaying(): boolean {
+    return this.backgroundMusic.isPlaying;
   }
 }
