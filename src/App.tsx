@@ -1,31 +1,51 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import GameContainer from './components/GameContainer';
 import UIOverlay from './components/UIOverlay';
-import MainScene from './game/scenes/MainScene';
+import MainScene, { Street } from './game/scenes/MainScene';
 
 function App() {
   const [mainScene, setMainScene] = useState<MainScene | null>(null);
+  const [currentStreet, setCurrentStreet] = useState<string>('Generative Markets Street');
+  const [allStreets, setAllStreets] = useState<Street[]>([]);
 
   const handleGameReady = useCallback((scene: MainScene) => {
     setMainScene(scene);
+    // Get initial street data
+    setCurrentStreet(scene.getCurrentStreet().name);
+    setAllStreets(scene.getAllStreets());
   }, []);
 
-  const handleScrollLeft = useCallback(() => {
+  const handleStreetLeft = useCallback(() => {
     if (mainScene) {
-      mainScene.scrollLeft();
+      mainScene.goToStreet('left');
+      setCurrentStreet(mainScene.getCurrentStreet().name);
     }
   }, [mainScene]);
 
-  const handleScrollRight = useCallback(() => {
+  const handleStreetRight = useCallback(() => {
     if (mainScene) {
-      mainScene.scrollRight();
+      mainScene.goToStreet('right');
+      setCurrentStreet(mainScene.getCurrentStreet().name);
+    }
+  }, [mainScene]);
+
+  const handleStreetSelect = useCallback((streetName: string) => {
+    if (mainScene) {
+      mainScene.setStreetByName(streetName);
+      setCurrentStreet(streetName);
     }
   }, [mainScene]);
 
   return (
     <div className="relative w-full h-full bg-black overflow-hidden">
       <GameContainer onGameReady={handleGameReady} />
-      <UIOverlay onScrollLeft={handleScrollLeft} onScrollRight={handleScrollRight} />
+      <UIOverlay
+        onStreetLeft={handleStreetLeft}
+        onStreetRight={handleStreetRight}
+        currentStreet={currentStreet}
+        allStreets={allStreets}
+        onStreetSelect={handleStreetSelect}
+      />
     </div>
   );
 }
