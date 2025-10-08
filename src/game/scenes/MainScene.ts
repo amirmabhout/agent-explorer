@@ -7,7 +7,6 @@ export interface Street {
 }
 
 export default class MainScene extends Phaser.Scene {
-  private shops: Map<string, Phaser.GameObjects.Container> = new Map();
   private player!: Phaser.GameObjects.Container;
   private currentShopIndex: number = 2; // Start at middle shop (index 2)
   private shopPositions: number[] = [170, 360, 600, 840, 1030];
@@ -23,11 +22,6 @@ export default class MainScene extends Phaser.Scene {
     { id: 'prediction-markets', name: 'Prediction Markets Street' },
     { id: 'socialfi', name: 'SocialFi Street' },
   ];
-
-  private readonly SHOP_WIDTH = 240;
-  private readonly SHOP_HEIGHT = 280;
-  private readonly SHOP_SPACING = 150;
-  private readonly GROUND_Y = 420;
 
   private readonly SHOP_CONFIGS: Shop[] = [
     {
@@ -125,11 +119,15 @@ export default class MainScene extends Phaser.Scene {
     });
 
     // Setup background music
-    this.backgroundMusic = this.sound.add('bgMusic', {
-      loop: true,
-      volume: 0.3, // 30% volume for ambient background
-    });
-    this.backgroundMusic.play();
+    try {
+      this.backgroundMusic = this.sound.add('bgMusic', {
+        loop: true,
+        volume: 0.3, // 30% volume for ambient background
+      });
+      this.backgroundMusic.play();
+    } catch (error) {
+      console.warn('Failed to load background music:', error);
+    }
   }
 
   update(): void {
@@ -253,6 +251,8 @@ export default class MainScene extends Phaser.Scene {
   }
 
   public toggleMusic(): boolean {
+    if (!this.backgroundMusic) return false;
+
     if (this.backgroundMusic.isPlaying) {
       this.backgroundMusic.pause();
       return false; // Music is now paused
@@ -263,6 +263,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   public isMusicPlaying(): boolean {
-    return this.backgroundMusic.isPlaying;
+    return this.backgroundMusic ? this.backgroundMusic.isPlaying : false;
   }
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import GameContainer from './components/GameContainer';
 import UIOverlay from './components/UIOverlay';
 import MainScene, { Street } from './game/scenes/MainScene';
