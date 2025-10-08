@@ -85,38 +85,31 @@ export default function UIOverlay({
         </div>
       </div>
 
-      {/* Navigation Controls - Positioned at vertical center */}
-      <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
+      {/* Navigation Controls - Minimal arrows at screen edges */}
+      <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-3 max-w-full mx-auto">
         {/* Left Arrow Button */}
         <button
           onClick={onStreetLeft}
           onMouseEnter={() => setHoveredButton('left')}
           onMouseLeave={() => setHoveredButton(null)}
-          className="group pointer-events-auto relative"
+          className="pointer-events-auto"
         >
-          <div className={`
-            w-20 h-20 flex items-center justify-center
-            bg-black/40 backdrop-blur-sm
-            border-2
-            transition-all duration-300
-            ${hoveredButton === 'left'
-              ? 'border-neon-cyan scale-110 shadow-[0_0_30px_rgba(0,255,255,0.7)]'
-              : 'border-neon-cyan/40 hover:border-neon-cyan/80'
-            }
-          `}
-          style={{
-            clipPath: 'polygon(30% 0%, 100% 0%, 100% 100%, 30% 100%, 0% 50%)'
-          }}>
-            <svg
-              className="w-10 h-10 text-neon-cyan transition-transform group-hover:-translate-x-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth={4}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </div>
+          <svg
+            className={`
+              w-12 h-12 sm:w-16 sm:h-16 text-neon-cyan
+              transition-all duration-300 cursor-pointer
+              ${hoveredButton === 'left'
+                ? 'scale-125 drop-shadow-[0_0_15px_rgba(0,255,255,0.8)]'
+                : 'opacity-70 hover:opacity-100'
+              }
+            `}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={3}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
 
         {/* Right Arrow Button */}
@@ -124,31 +117,24 @@ export default function UIOverlay({
           onClick={onStreetRight}
           onMouseEnter={() => setHoveredButton('right')}
           onMouseLeave={() => setHoveredButton(null)}
-          className="group pointer-events-auto relative"
+          className="pointer-events-auto"
         >
-          <div className={`
-            w-20 h-20 flex items-center justify-center
-            bg-black/40 backdrop-blur-sm
-            border-2
-            transition-all duration-300
-            ${hoveredButton === 'right'
-              ? 'border-neon-cyan scale-110 shadow-[0_0_30px_rgba(0,255,255,0.7)]'
-              : 'border-neon-cyan/40 hover:border-neon-cyan/80'
-            }
-          `}
-          style={{
-            clipPath: 'polygon(0% 0%, 70% 0%, 100% 50%, 70% 100%, 0% 100%)'
-          }}>
-            <svg
-              className="w-10 h-10 text-neon-cyan transition-transform group-hover:translate-x-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth={4}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
+          <svg
+            className={`
+              w-12 h-12 sm:w-16 sm:h-16 text-neon-cyan
+              transition-all duration-300 cursor-pointer
+              ${hoveredButton === 'right'
+                ? 'scale-125 drop-shadow-[0_0_15px_rgba(0,255,255,0.8)]'
+                : 'opacity-70 hover:opacity-100'
+              }
+            `}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={3}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
 

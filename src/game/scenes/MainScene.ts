@@ -85,8 +85,13 @@ export default class MainScene extends Phaser.Scene {
     // Create static background
     this.createBackground();
 
-    // Position shops to match background locations (5 evenly distributed)
-    const shopY = 280; // Vertical center of shops in background
+    // Position shops to match background locations (5 evenly distributed) - responsive
+    const { width, height } = this.scale.gameSize;
+    const shopY = height * 0.47; // Approximately where shops are in the image
+
+    // Calculate shop positions as percentages of screen width
+    const shopXPositions = [0.14, 0.30, 0.50, 0.70, 0.86]; // Evenly distributed
+    this.shopPositions = shopXPositions.map(percent => width * percent);
 
     this.SHOP_CONFIGS.forEach((config, index) => {
       const xPos = this.shopPositions[index];
@@ -95,6 +100,11 @@ export default class MainScene extends Phaser.Scene {
 
     // Create player
     this.createPlayer();
+
+    // Handle resize for shops and player
+    this.scale.on('resize', (gameSize: Phaser.Structs.Size) => {
+      this.handleResize(gameSize);
+    });
 
     // Setup keyboard controls
     this.cursors = this.input.keyboard!.createCursorKeys();
@@ -140,15 +150,39 @@ export default class MainScene extends Phaser.Scene {
   }
 
   private createBackground(): void {
-    // Display static background with all 5 shops
-    const bg = this.add.image(600, 300, 'shops-bg');
-    bg.setDisplaySize(1200, 600);
+    // Display static background with all 5 shops - responsive scaling
+    const bg = this.add.image(0, 0, 'shops-bg');
+    bg.setOrigin(0.5, 0.5);
     bg.setDepth(-10);
+
+    // Handle window resize to keep background responsive
+    this.scale.on('resize', (gameSize: Phaser.Structs.Size) => {
+      const width = gameSize.width;
+      const height = gameSize.height;
+
+      // Center the background
+      bg.setPosition(width / 2, height / 2);
+
+      // Scale background to cover the entire screen while maintaining aspect ratio
+      const scaleX = width / bg.width;
+      const scaleY = height / bg.height;
+      const scale = Math.max(scaleX, scaleY);
+      bg.setScale(scale);
+    });
+
+    // Trigger initial resize
+    const { width, height } = this.scale.gameSize;
+    bg.setPosition(width / 2, height / 2);
+    const scaleX = width / bg.width;
+    const scaleY = height / bg.height;
+    const scale = Math.max(scaleX, scaleY);
+    bg.setScale(scale);
   }
 
   private createPlayer(): void {
-    const startX = 600; // Start at middle shop
-    const startY = 480; // Ground level
+    const { height } = this.scale.gameSize;
+    const startX = this.shopPositions[2]; // Start at middle shop
+    const startY = height * 0.80; // Ground level (80% down the screen)
 
     this.player = this.add.container(startX, startY);
 
@@ -168,22 +202,32 @@ export default class MainScene extends Phaser.Scene {
       this.player.add([body, head, jacket, visor]);
     }
 
-    // Idle breathing animation
-    this.tweens.add({
-      targets: this.player,
-      y: startY - 3,
-      duration: 2000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut'
-    });
-
     this.player.setDepth(100);
+  }
+
+  private handleResize(gameSize: Phaser.Structs.Size): void {
+    const { width, height } = gameSize;
+
+    // Recalculate shop positions
+    const shopXPositions = [0.14, 0.30, 0.50, 0.70, 0.86];
+    this.shopPositions = shopXPositions.map(percent => width * percent);
+
+    // Update player position to follow current shop
+    if (this.player) {
+      this.player.setPosition(
+        this.shopPositions[this.currentShopIndex],
+        height * 0.80
+      );
+    }
   }
 
   private createShop(config: Shop, index: number): void {
     // Create invisible interactive hitbox (shops are in background)
-    const hitbox = this.add.rectangle(config.x, config.y, config.width, config.height, 0xffffff, 0);
+    // Reduce height by 1/3 and adjust Y position to fit shops better
+    const adjustedHeight = config.height * (2/3);
+    const adjustedY = config.y - config.height / 6; // Move up by 1/6 of original height
+
+    const hitbox = this.add.rectangle(config.x, adjustedY, config.width, adjustedHeight, 0xffffff, 0);
     hitbox.setInteractive({ useHandCursor: true });
 
     hitbox.on('pointerdown', () => {
