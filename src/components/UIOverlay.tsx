@@ -29,18 +29,16 @@ export default function UIOverlay({
 
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {/* Top Bar - Street Dropdown and Name */}
-      <div className="absolute top-6 left-0 right-0 flex items-center justify-between px-6">
-        {/* Dropdown Street Selector */}
-        <div className="relative pointer-events-auto">
+      {/* Top Center - Street Selector with Dropdown */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 pointer-events-auto">
+        <div className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 bg-black/40 backdrop-blur-sm border-2 border-neon-cyan/40 hover:border-neon-cyan px-4 py-2 rounded-lg transition-all"
+            className="flex items-center gap-3 bg-black/40 backdrop-blur-sm border-2 border-neon-cyan/40 hover:border-neon-cyan px-6 py-3 rounded-lg transition-all"
           >
-            <svg className="w-4 h-4 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <span className="font-orbitron text-xs text-neon-cyan tracking-wide">STREETS</span>
+            <p className="font-orbitron text-sm text-neon-cyan tracking-wide uppercase font-bold">
+              {currentStreet}
+            </p>
             <svg
               className={`w-4 h-4 text-neon-cyan transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
               fill="none"
@@ -53,7 +51,7 @@ export default function UIOverlay({
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute top-full mt-2 left-0 min-w-[280px] bg-black/90 backdrop-blur-sm border-2 border-neon-cyan/40 rounded-lg overflow-hidden z-50">
+            <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 min-w-[320px] bg-black/90 backdrop-blur-sm border-2 border-neon-cyan/40 rounded-lg overflow-hidden z-50">
               {allStreets.map((street) => (
                 <button
                   key={street.id}
@@ -72,16 +70,6 @@ export default function UIOverlay({
               ))}
             </div>
           )}
-        </div>
-
-      </div>
-
-      {/* Centered Street Name Display */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2">
-        <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm border border-neon-cyan/30 px-6 py-2 rounded-lg">
-          <p className="font-orbitron text-sm text-neon-cyan tracking-wide uppercase font-bold">
-            {currentStreet}
-          </p>
         </div>
       </div>
 
@@ -164,14 +152,12 @@ export default function UIOverlay({
         </button>
 
         {/* Hint */}
-        <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm border border-neon-cyan/30 px-4 py-2 rounded-lg">
-          <div className="flex gap-1">
-            <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></div>
-            <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse delay-75"></div>
-            <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse delay-150"></div>
-          </div>
+        <div className="flex items-center gap-3 bg-black/30 backdrop-blur-sm border border-neon-cyan/30 px-4 py-2 rounded-lg">
+          <svg className="w-6 h-6 text-neon-cyan animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M13.5 2C13.5 2 15 3.5 15 5.5C15 7.5 13.5 9 13.5 9L9 13.5C9 13.5 7.5 15 5.5 15C3.5 15 2 13.5 2 13.5C2 13.5 3.5 12 5.5 12C7.5 12 9 13.5 9 13.5L13.5 9C13.5 9 12 7.5 12 5.5C12 3.5 13.5 2 13.5 2M9 13.5L7 16L11 20L13.5 18L9 13.5M18 2L20 4L14.5 9.5L12.5 7.5L18 2M22 8L20 10L18 8L20 6L22 8Z"/>
+          </svg>
           <p className="font-orbitron text-xs text-neon-cyan/70 tracking-wide">
-            Click shop to explore
+            Click on an agent to interact
           </p>
         </div>
       </div>

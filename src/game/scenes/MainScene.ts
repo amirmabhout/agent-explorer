@@ -8,6 +8,7 @@ export interface Street {
 
 export default class MainScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Container;
+  private beam!: Phaser.GameObjects.Image;
   private currentShopIndex: number = 2; // Start at middle shop (index 2)
   private shopPositions: number[] = [170, 360, 600, 840, 1030];
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -71,8 +72,10 @@ export default class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
-    // Load background with all 5 shops built-in
-    this.load.image('shops-bg', '/assets/shops/shop.png');
+    // Load background layers
+    this.load.image('background', '/assets/backgrounds/background.png');
+    this.load.image('beam', '/assets/props/elizaos-projection.png');
+    this.load.image('shops-layer', '/assets/shops/shops.png');
 
     // Load character sprites
     this.load.image('player-idle', '/assets/characters/player_idle.png');
@@ -150,33 +153,149 @@ export default class MainScene extends Phaser.Scene {
   }
 
   private createBackground(): void {
-    // Display static background with all 5 shops - responsive scaling
-    const bg = this.add.image(0, 0, 'shops-bg');
-    bg.setOrigin(0.5, 0.5);
-    bg.setDepth(-10);
+    // Create the cityscape background layer (behind everything)
+    const background = this.add.image(0, 0, 'background');
+    background.setOrigin(0.5, 0.5);
+    background.setDepth(-10);
 
-    // Handle window resize to keep background responsive
+    // Create the beam/projection layer (between background and shops)
+    this.beam = this.add.image(0, 0, 'beam');
+    this.beam.setOrigin(0.5, 0.5);
+    this.beam.setDepth(-5);
+    this.beam.setAlpha(0); // Start invisible for animation
+
+    // Create the shops layer (in front of background and beam, behind player)
+    const shopsLayer = this.add.image(0, 0, 'shops-layer');
+    shopsLayer.setOrigin(0.5, 0.5);
+    shopsLayer.setDepth(0);
+
+    // Handle window resize to keep all layers responsive
     this.scale.on('resize', (gameSize: Phaser.Structs.Size) => {
       const width = gameSize.width;
       const height = gameSize.height;
 
-      // Center the background
-      bg.setPosition(width / 2, height / 2);
+      // Center all layers
+      background.setPosition(width / 2, height / 2);
+      this.beam.setPosition(width * 0.68, height * 0.35);
+      shopsLayer.setPosition(width / 2, height / 2);
 
       // Scale background to cover the entire screen while maintaining aspect ratio
-      const scaleX = width / bg.width;
-      const scaleY = height / bg.height;
-      const scale = Math.max(scaleX, scaleY);
-      bg.setScale(scale);
+      const bgScaleX = width / background.width;
+      const bgScaleY = height / background.height;
+      const bgScale = Math.max(bgScaleX, bgScaleY);
+      background.setScale(bgScale);
+
+      // Scale beam layer smaller to make it appear more distant
+      const beamScaleX = width / this.beam.width;
+      const beamScaleY = height / this.beam.height;
+      const beamScale = Math.max(beamScaleX, beamScaleY) * 0.6;
+      this.beam.setScale(beamScale);
+
+      // Scale shops layer to match
+      const shopsScaleX = width / shopsLayer.width;
+      const shopsScaleY = height / shopsLayer.height;
+      const shopsScale = Math.max(shopsScaleX, shopsScaleY);
+      shopsLayer.setScale(shopsScale);
     });
 
-    // Trigger initial resize
+    // Trigger initial resize for all layers
     const { width, height } = this.scale.gameSize;
-    bg.setPosition(width / 2, height / 2);
-    const scaleX = width / bg.width;
-    const scaleY = height / bg.height;
-    const scale = Math.max(scaleX, scaleY);
-    bg.setScale(scale);
+
+    background.setPosition(width / 2, height / 2);
+    const bgScaleX = width / background.width;
+    const bgScaleY = height / background.height;
+    const bgScale = Math.max(bgScaleX, bgScaleY);
+    background.setScale(bgScale);
+
+    this.beam.setPosition(width * 0.68, height * 0.35);
+    const beamScaleX = width / this.beam.width;
+    const beamScaleY = height / this.beam.height;
+    const beamScale = Math.max(beamScaleX, beamScaleY) * 0.6;
+    this.beam.setScale(beamScale);
+
+    shopsLayer.setPosition(width / 2, height / 2);
+    const shopsScaleX = width / shopsLayer.width;
+    const shopsScaleY = height / shopsLayer.height;
+    const shopsScale = Math.max(shopsScaleX, shopsScaleY);
+    shopsLayer.setScale(shopsScale);
+
+    // Start beam animation
+    this.animateBeam();
+  }
+
+  private animateBeam(): void {
+    const { width, height } = this.scale.gameSize;
+    const baseX = width * 0.68;
+    const baseY = height * 0.35;
+
+    // Phase 1: Initial flickering (Batman-style power-up)
+    const flickerDuration = 50; // Fast flickers
+    const flickerAlphas = [0, 0.3, 0, 0.5, 0.2, 0.7, 0, 0.4, 0.6, 0, 0.5, 0.8];
+
+    // Create chain of flicker tweens
+    let currentDelay = 0;
+    flickerAlphas.forEach((alpha) => {
+      this.tweens.add({
+        targets: this.beam,
+        alpha: alpha,
+        duration: flickerDuration,
+        delay: currentDelay,
+        ease: 'Linear',
+      });
+      currentDelay += flickerDuration;
+    });
+
+    // Phase 2: Stabilization - smooth fade to final opacity
+    const stabilizationDelay = currentDelay;
+    this.tweens.add({
+      targets: this.beam,
+      alpha: 0.5,
+      duration: 500,
+      delay: stabilizationDelay,
+      ease: 'Power2',
+      onComplete: () => {
+        // Phase 3: Start persistent jitters after stabilization
+        this.startBeamJitters(baseX, baseY);
+      },
+    });
+  }
+
+  private startBeamJitters(baseX: number, baseY: number): void {
+    // Random interval between jitters (3-8 seconds)
+    const scheduleNextJitter = () => {
+      const delay = Phaser.Math.Between(3000, 8000);
+
+      this.time.delayedCall(delay, () => {
+        // Quick alpha flicker
+        this.tweens.add({
+          targets: this.beam,
+          alpha: 0.3,
+          duration: 75,
+          yoyo: true,
+          ease: 'Linear',
+        });
+
+        // Slight position shake
+        this.tweens.add({
+          targets: this.beam,
+          x: baseX + Phaser.Math.Between(-2, 2),
+          y: baseY + Phaser.Math.Between(-2, 2),
+          duration: 75,
+          yoyo: true,
+          ease: 'Linear',
+          onComplete: () => {
+            // Reset position to base
+            this.beam.setPosition(baseX, baseY);
+          },
+        });
+
+        // Schedule next jitter
+        scheduleNextJitter();
+      });
+    };
+
+    // Start the jitter cycle
+    scheduleNextJitter();
   }
 
   private createPlayer(): void {
